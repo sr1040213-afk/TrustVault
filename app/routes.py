@@ -25,6 +25,12 @@ def register_routes(app):
 
         if request.method == "POST":
             supplied_secret = request.form.get("bootstrap_secret", "")
+            current_app.logger.info(
+            "BOOTSTRAP CHECK: configured=%s, entered_length=%s, saved_length=%s",
+            bool(secret),
+            len(supplied_secret),
+            len(secret)
+)
 
             if not hmac.compare_digest(supplied_secret, secret):
                 flash("Invalid setup credentials.", "danger")
