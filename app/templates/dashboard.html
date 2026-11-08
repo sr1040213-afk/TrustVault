@@ -3,7 +3,7 @@
 {% if current_user.role != 'viewer' %}<a class="btn primary" href="{{ url_for('upload') }}">＋ Upload document</a>{% endif %}</div>
 <div <div class="section-head">
     <a class="btn" href="{{ url_for('activity_history') }}">View Activity History</a>
-</div>class="stats"><div class="stat"><span>OWNED DOCUMENTS</span><strong>{{ owned|length }}</strong></div><div class="stat"><span>SHARED WITH YOU</span><strong>{{ received|length }}</strong></div><div class="stat"><span>YOUR ROLE</span><strong class="capitalize">{{ current_user.role }}</strong></div></div>
+</div><div class="stats"><div class="stat"><span>OWNED DOCUMENTS</span><strong>{{ owned|length }}</strong></div><div class="stat"><span>SHARED WITH YOU</span><strong>{{ received|length }}</strong></div><div class="stat"><span>YOUR ROLE</span><strong class="capitalize">{{ current_user.role }}</strong></div></div>
 <div class="content-grid"><section class="panel"><div class="panel-head"><h2>Your documents</h2><a href="{{ url_for('search_documents') }}">View all →</a></div>
 {% for d in owned %}<a class="doc-row" href="{{ url_for('document_detail', document_id=d.id) }}"><span class="file-icon">PDF</span><span class="doc-info"><b>{{ d.title }}</b><small>{{ d.category }} · {{ d.original_name }}</small></span><span class="row-arrow">↗</span></a>{% else %}<div class="empty">No documents yet. Upload your first file to begin.</div>{% endfor %}</section>
 <section class="panel"><div class="panel-head"><h2>Shared with you</h2></div>
