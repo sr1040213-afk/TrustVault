@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustVault - Secure Role Setup</title>
+</head>
+<body>
+    <h2>TrustVault Secure Role Setup</h2>
+
+    <p>Use this one-time page to configure the initial Admin and Owner accounts.</p>
+
+    <form method="POST" action="{{ url_for('bootstrap_roles') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label>Bootstrap Secret</label><br>
+        <input type="password" name="bootstrap_secret"
+               required autocomplete="off"><br><br>
+
+        <label>Admin Email</label><br>
+        <input type="email" name="admin_email"
+               required><br><br>
+
+        <label>Owner Email</label><br>
+        <input type="email" name="owner_email"
+               required><br><br>
+
+        <button type="submit">Configure Roles</button>
+    </form>
+</body>
+</html>

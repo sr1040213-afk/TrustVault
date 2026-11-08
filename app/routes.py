@@ -1,4 +1,5 @@
 import os, uuid
+import hmac
 from pathlib import Path
 from flask import render_template, request, redirect, url_for, flash, abort, send_file, current_app
 from flask_login import login_user, logout_user, login_required, current_user
@@ -9,6 +10,66 @@ from .models import User, Document, Grant, AuditEvent
 from .security import allowed_file, sha256_file, validate_file_content, can_access, append_audit, verify_audit_chain
 
 def register_routes(app):
+    
+    @app.route("/bootstrap-roles", methods=["GET", "POST"])
+    def bootstrap_roles():
+        secret = os.getenv("BOOTSTRAP_SECRET", "")
+
+        # Setup is disabled unless a secret is configured.
+        if not secret:
+            abort(404)
+
+        # This setup can run only once, before any Admin exists.
+        if User.query.filter_by(role="admin").first():
+            abort(404)
+
+        if request.method == "POST":
+            supplied_secret = request.form.get("bootstrap_secret", "")
+
+            if not hmac.compare_digest(supplied_secret, secret):
+                flash("Invalid setup credentials.", "danger")
+                return render_template("bootstrap_roles.html"), 403
+
+            admin_email = request.form.get("admin_email", "").strip().lower()
+            owner_email = request.form.get("owner_email", "").strip().lower()
+
+            if not admin_email or not owner_email or admin_email == owner_email:
+                flash("Enter two different valid email addresses.", "danger")
+                return render_template("bootstrap_roles.html"), 400
+
+            admin_user = User.query.filter_by(email=admin_email).first()
+            owner_user = User.query.filter_by(email=owner_email).first()
+
+            if (
+                not admin_user or not owner_user
+                or not admin_user.active or not owner_user.active
+            ):
+                flash("Both accounts must exist and be active.", "danger")
+                return render_template("bootstrap_roles.html"), 400
+
+            try:
+                admin_user.role = "admin"
+                owner_user.role = "owner"
+
+                append_audit(
+                    "initial_admin_assigned",
+                    detail=f"Admin account configured: {admin_email}"
+                )
+                append_audit(
+                    "initial_owner_assigned",
+                    detail=f"Owner account configured: {owner_email}"
+                )
+
+                db.session.commit()
+                return "Initial Admin and Owner roles configured successfully."
+
+            except Exception:
+                db.session.rollback()
+                current_app.logger.exception("Initial role setup failed")
+                abort(500)
+
+        return render_template("bootstrap_roles.html")
+
     @app.context_processor
     def inject_globals():
         return {"app_name": "TrustVault"}
