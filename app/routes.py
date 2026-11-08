@@ -259,7 +259,7 @@ def register_routes(app):
 
         db.session.commit()
         return redirect(url_for("document_detail", document_id=doc.id))
-@app.post("/documents/<int:document_id>/edit")
+    @app.post("/documents/<int:document_id>/edit")
     @login_required
     def edit_document(document_id):
         doc = db.session.get(Document, document_id)
