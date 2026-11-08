@@ -22,8 +22,7 @@ Keep this log accurate. Never commit secrets or customer documents. Do not claim
 * **Tool output:** Local pytest authorization tests verified cross-user access restrictions, Viewer/Admin upload restrictions, Read/Edit grants and immediate revocation.
 * **Issue identified:** Authorization behavior needed explicit route-level tests, including attempts to access another user's documents.
 * **What was done instead:** Added and ran automated tests for unauthorized document access, permission enforcement, sharing and revocation. The local test suite passed.
-* **Fixing commit:** Add the actual GitHub commit URL after committing and pushing the relevant changes.
-
+* Fixing commit: Consolidated implementation snapshot — 4d857678bf32b01eee62cc34ef3d9b813eb208dd
 
 
 ## 2026-11-08 — Audit integrity and denied-attempt verification
@@ -32,7 +31,7 @@ Keep this log accurate. Never commit secrets or customer documents. Do not claim
 * **Tool output:** The audit HMAC tampering test verified that modifying an audit event causes chain verification to fail. Tests also checked selected denied operations.
 * **Issue identified:** Audit integrity and denied-operation recording needed explicit verification rather than relying only on the audit implementation.
 * **What was done instead:** Added and ran audit tampering and denied-operation tests, then verified the local test suite.
-* **Fixing commit:** Add the actual GitHub commit URL after committing and pushing the relevant changes.
+* Fixing commit: Consolidated implementation snapshot — 4d857678bf32b01eee62cc34ef3d9b813eb208dd
 
 
 
@@ -42,4 +41,4 @@ Keep this log accurate. Never commit secrets or customer documents. Do not claim
 * **Tool output:** Local tests verified authenticated activity history and cross-user activity isolation. README, API.md and THREATS.md were reviewed and updated.
 * **Issue identified:** Documentation contained outdated role information and omitted some implemented routes and verified security scenarios.
 * **What was done instead:** Corrected the Viewer-by-default registration description, updated route permissions and documented verified threat scenarios.
-* **Fixing commit:** Add the actual GitHub commit URL after committing and pushing the relevant changes.
+* Fixing commit: Consolidated implementation snapshot — 4d857678bf32b01eee62cc34ef3d9b813eb208dd
