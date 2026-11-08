@@ -48,7 +48,7 @@ def register_routes(app):
                 login_user(user)
                 append_audit("login", detail="Successful login")
                 db.session.commit()
-                return redirect(url_for("admin_dashboard" if user.role == "admin" else "dashboard"))
+                return redirect(url_for("admin_dashboard" if user.role in ("admin", "owner") else "dashboard"))
             append_audit("login", outcome="denied", detail=f"Failed login for {email}")
             db.session.commit()
             flash("Invalid credentials or inactive account.", "danger")
@@ -379,3 +379,4 @@ def test_viewer_cannot_upload_using_post(client):
     )
 
     assert response.status_code == 403
+
