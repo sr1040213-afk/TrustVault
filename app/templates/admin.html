@@ -1,0 +1,86 @@
+{% extends "base.html" %}{% block title %}Admin console{% endblock %}{% block content %}
+<div class="eyebrow">SECURITY OPERATIONS</div><h1>Administrator console</h1><p class="muted">Operational visibility across accounts, documents and recorded activity. Admin access does not grant document content access.</p>
+<div class="stats"><div class="stat"><span>REGISTERED USERS</span><strong>{{ users|length }}</strong></div><div class="stat"><span>DOCUMENT RECORDS</span><strong>{{ docs|length }}</strong></div><div class="stat"><span>AUDIT EVENTS</span><strong>{{ events|length }}</strong></div></div>
+<div class="panel"><div class="panel-head"><h2>Audit integrity status</h2><span class="status {{ 'good' if chain_ok else 'bad' }}">{{ 'HMAC VERIFIED' if chain_ok else 'INTEGRITY ISSUE' }}</span></div><p class="hint">Each event MAC is recalculated and compared with the stored HMAC, including previous-event linkage. Keep the HMAC key outside the database.</p></div>
+<div class="content-grid"><section class="panel"><h2>User directory</h2>{% for u in users %}<div class="table-row"><span><b>{{ u.name }}</b><small>{{ u.email }} · {{ u.role }}</small></span><span>{{ 'Active' if u.active else 'Disabled' }}</span>{% if u.id != current_user.id %}<form method="post" action="{{ url_for('change_user_role', user_id=u.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><select name="role"><option value="owner" {{ 'selected' if u.role == 'owner' }}>Owner</option><option value="viewer" {{ 'selected' if u.role == 'viewer' }}>Viewer</option><option value="admin" {{ 'selected' if u.role == 'admin' }}>Admin</option></select><button class="btn secondary">Update role</button></form><form method="post" action="{{ url_for('toggle_user', user_id=u.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="danger-link">{{ 'Disable' if u.active else 'Activate' }}</button></form>{% endif %}</div>{% endfor %}</section>
+<section class="panel">
+    <h2>Audit log — All recorded activity</h2>
+
+    {% for e in events %}
+        <div class="event-row">
+            <b>{{ e.action.replace('_',' ') }}</b>
+
+            <small>
+                {{ e.actor.email if e.actor else 'System' }}
+                · {{ e.outcome }}
+                · {{ e.created_at.strftime('%Y-%m-%d %H:%M') }}
+            </small>
+
+            {% if e.detail %}
+                <small>{{ e.detail }}</small>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="empty">No events recorded.</div>
+    {% endfor %}
+</section><section class="panel" style="margin-top: 20px;">
+    <h2>Document sharing monitor</h2>
+
+    {% for grant in grants %}
+        <div class="table-row">
+            <span>
+                <b>{{ grant.document.title }}</b>
+                <small>
+                    Owner: {{ grant.document.owner.email }}
+                </small>
+                <small>
+                    Shared with: {{ grant.user.email }}
+                    · Permission: {{ grant.permission }}
+                </small>
+                <small>
+                    Granted: {{ grant.created_at.strftime('%Y-%m-%d %H:%M') }}
+                    ·
+                    {{ 'Revoked' if grant.revoked_at else 'Active' }}
+                </small>
+            </span>
+        </div>
+    {% else %}
+        <div class="empty">No sharing records found.</div>
+        {% endfor %}
+</section>
+
+<section class="panel" style="margin-top: 20px;">
+    <h2>Uploaded documents</h2>
+
+    {% for doc in docs %}
+        <div class="table-row">
+            <span>
+                <b>{{ doc.title }}</b>
+                <small>
+                    {{ doc.original_name }} ·
+                    Owner: {{ doc.owner.email }} ·
+                    Category: {{ doc.category }}
+                </small>
+                <small>
+                    Uploaded: {{ doc.created_at.strftime('%Y-%m-%d %H:%M') }}
+                    ·
+                    {{ 'Deleted' if doc.deleted_at else 'Active' }}
+                </small>
+            </span>
+
+            {% if not doc.deleted_at %}
+                <form method="post"
+                      action="{{ url_for('admin_delete_document', document_id=doc.id) }}"
+                      onsubmit="return confirm('Delete this document?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="danger-link" type="submit">
+                        Delete
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="empty">No documents uploaded.</div>
+    {% endfor %}
+</section>
+{% endblock %}

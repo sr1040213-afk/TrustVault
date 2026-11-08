@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}Upload document{% endblock %}{% block content %}
+<div class="narrow"><a class="back" href="{{ url_for('dashboard') }}">← Workspace</a><div class="eyebrow">PRIVATE FILE STORAGE</div><h1>Upload a document</h1><p class="muted">Files are stored outside the public web directory and served only after an authorization check.</p>
+<form class="panel form-panel" method="post" enctype="multipart/form-data"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Document title<input name="title" required maxlength="180" placeholder="e.g. Supplier Agreement"></label>
+<label>Category<select name="category"><option>General</option><option>Contracts</option><option>Finance</option><option>Human Resources</option><option>Compliance</option><option>Engineering</option></select></label>
+<label>Choose file<input type="file" name="file" required accept=".pdf,.docx,.xlsx,.pptx,.txt,.png,.jpg,.jpeg"></label>
+<p class="hint">Allowed: PDF, Office documents, TXT and common images · Maximum 10 MB.</p>
+<button class="btn primary">Upload securely</button></form></div>{% endblock %}

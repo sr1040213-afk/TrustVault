@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Workspace{% endblock %}{% block content %}
+<div class="section-head"><div><div class="eyebrow">PERSONAL WORKSPACE</div><h1>Good to see you, {{ current_user.name.split(' ')[0] }}.</h1><p class="muted">Manage your documents and the access you have been given.</p></div>
+{% if current_user.role != 'viewer' %}<a class="btn primary" href="{{ url_for('upload') }}">＋ Upload document</a>{% endif %}</div>
+<div <div class="section-head">
+    <a class="btn" href="{{ url_for('activity_history') }}">View Activity History</a>
+</div>class="stats"><div class="stat"><span>OWNED DOCUMENTS</span><strong>{{ owned|length }}</strong></div><div class="stat"><span>SHARED WITH YOU</span><strong>{{ received|length }}</strong></div><div class="stat"><span>YOUR ROLE</span><strong class="capitalize">{{ current_user.role }}</strong></div></div>
+<div class="content-grid"><section class="panel"><div class="panel-head"><h2>Your documents</h2><a href="{{ url_for('search_documents') }}">View all →</a></div>
+{% for d in owned %}<a class="doc-row" href="{{ url_for('document_detail', document_id=d.id) }}"><span class="file-icon">PDF</span><span class="doc-info"><b>{{ d.title }}</b><small>{{ d.category }} · {{ d.original_name }}</small></span><span class="row-arrow">↗</span></a>{% else %}<div class="empty">No documents yet. Upload your first file to begin.</div>{% endfor %}</section>
+<section class="panel"><div class="panel-head"><h2>Shared with you</h2></div>
+{% for d in received %}<a class="doc-row" href="{{ url_for('document_detail', document_id=d.id) }}"><span class="file-icon shared">SHR</span><span class="doc-info"><b>{{ d.title }}</b><small>Shared by {{ d.owner.name }}</small></span><span class="row-arrow">↗</span></a>{% else %}<div class="empty">Documents shared with you will appear here.</div>{% endfor %}</section></div>
+{% endblock %}

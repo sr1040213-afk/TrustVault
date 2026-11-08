@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Secure document collaboration{% endblock %}
+{% block content %}
+<section class="hero">
+<div class="eyebrow"><span class="pulse"></span> SECURE DOCUMENT COLLABORATION</div>
+<h1>Your documents.<br><em>Your control.</em></h1>
+<p class="hero-copy">Share sensitive files with confidence. TrustVault enforces document-level permissions and creates a tamper-evident record of every important action.</p>
+<div class="hero-actions"><a class="btn primary" href="{{ url_for('register') }}">Create secure workspace <span>↗</span></a><a class="btn secondary" href="{{ url_for('login') }}">Sign in</a></div>
+<div class="trust-row"><span>● Private file storage</span><span>● Granular permissions</span><span>● Verifiable activity trail</span></div>
+</section>
+<section class="feature-grid">
+<div class="feature"><div class="feature-icon">⌁</div><h3>Access by design</h3><p>Every document request is checked on the server against its current owner and grants.</p></div>
+<div class="feature"><div class="feature-icon">◷</div><h3>Accountability built in</h3><p>Record uploads, views, downloads, edits, permission changes and denied attempts.</p></div>
+<div class="feature"><div class="feature-icon">⬡</div><h3>Integrity you can verify</h3><p>SHA-256 fingerprints help detect changes to stored documents.</p></div>
+</section>
+{% endblock %}

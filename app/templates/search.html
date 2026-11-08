@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}Documents{% endblock %}{% block content %}
+<div class="eyebrow">DOCUMENT LIBRARY</div><h1>Find a document</h1><p class="muted">Search only returns documents you are currently authorized to access.</p>
+<form class="searchbar"><input name="q" value="{{ q }}" placeholder="Search by document name"><input name="category" value="{{ category }}" placeholder="Category"><button class="btn primary">Search</button></form>
+<section class="panel">{% for d in documents %}<a class="doc-row" href="{{ url_for('document_detail', document_id=d.id) }}"><span class="file-icon">DOC</span><span class="doc-info"><b>{{ d.title }}</b><small>{{ d.category }} · Owner: {{ d.owner.name }}</small></span><span class="row-arrow">↗</span></a>{% else %}<div class="empty">No accessible documents match your search.</div>{% endfor %}</section>{% endblock %}

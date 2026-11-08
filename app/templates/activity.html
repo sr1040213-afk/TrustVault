@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Activity History</h2>
+
+{% if events %}
+<table>
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Outcome</th>
+            <th>Document ID</th>
+            <th>Details</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr>
+            <td>{{ event.action }}</td>
+            <td>{{ event.outcome }}</td>
+            <td>{{ event.document_id or '-' }}</td>
+            <td>{{ event.detail or '-' }}</td>
+            <td>{{ event.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No activity recorded yet.</p>
+{% endif %}
+{% endblock %}

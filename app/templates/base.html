@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}TrustVault{% endblock %} · TrustVault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="nav"><a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">T</span> TrustVault</a>
+<div class="nav-links">
+{% if current_user.is_authenticated %}
+<a href="{{ url_for('dashboard') }}">Workspace</a><a href="{{ url_for('search_documents') }}">Documents</a>
+{% if current_user.role == 'admin' %}<a href="{{ url_for('admin_dashboard') }}">Admin</a>{% endif %}
+<form method="post" action="{{ url_for('logout') }}" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="link-btn">Sign out</button></form>
+{% else %}<a href="{{ url_for('login') }}">Sign in</a><a class="nav-cta" href="{{ url_for('register') }}">Get started</a>{% endif %}
+</div></nav>
+<main class="page">
+{% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+{% block content %}{% endblock %}
+</main>
+<footer>TRUSTVAULT <span>·</span> PRIVATE BY DESIGN. ACCOUNTABLE BY DEFAULT.</footer>
+</body></html>
