@@ -1,4 +1,4 @@
-# TrustVault — Secure Document Sharing \& Audit Platform
+# TrustVault - Secure Document Sharing and Audit Platform
 
 Flask portfolio application for document-level authorization, private file storage, integrity checks and HMAC-chained audit events.
 
@@ -6,7 +6,7 @@ Flask portfolio application for document-level authorization, private file stora
 
 * Owner, Viewer and Admin roles; Admin role provisioning in the console.
 * Document Read/Edit grants; owner sharing; immediate per-request revocation checks.
-* Private file storage outside static; extension allowlist and basic PDF/image/TXT/Office-container checks.
+* Private file storage outside static; extension allow list and basic PDF/image/TXT/Office-container checks.
 * SHA-256 at upload and before download; tampered object returns HTTP 409 and is audited.
 * HMAC-SHA256 audit event recomputation and previous-event linkage verification.
 * CSRF protection, 10 MiB request limit, safer session-cookie defaults and baseline security headers.
@@ -14,23 +14,23 @@ Flask portfolio application for document-level authorization, private file stora
 * Added tests for authorization, revocation, HMAC tampering, modified stored files and fake PDF uploads.
 
 ## Windows setup
-
 ```powershell
 py -3.11 -m venv .venv
-.\\.venv\\Scripts\\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 Copy-Item .env.example .env
+python -m flask --app run.py db upgrade
 python run.py
 ```
 
-Open http://127.0.0.1:5000. Keep the terminal open. Set independent random `SECRET\_KEY` and `AUDIT\_HMAC\_KEY` values in `.env`; never commit `.env`. Set `COOKIE\_SECURE=1` only behind HTTPS.
+Open http://127.0.0.1:5000. Keep the terminal open. Set independent random `SECRET_KEY` and `AUDIT_HMAC_KEY` values in `.env`; never commit `.env`. Set `COOKIE_SECURE=1` only behind HTTPS.
 
 ## Roles
 
-\## Roles
 
-Registration creates Viewer accounts by default. Users cannot self-assign Owner or Admin roles. For a fresh local demo, follow `docs/ADMIN\_BOOTSTRAP.md` to provision the first admin. Admins can manage user roles and activate/deactivate accounts.
+
+Registration creates Viewer accounts by default. Users cannot self-assign Owner or Admin roles. For a fresh local demo, follow `docs/ADMIN_BOOTSTRAP.md` to provision the first admin. Admins can manage user roles and activate/deactivate accounts.
 
 ## Tests
 
